@@ -2,16 +2,16 @@ require_relative "room"
 
 class Hotel
 attr_reader :capacity, :occupants, :rooms
-    def initialize(name, hash)
+    def initialize(name, all_hotel_rooms)
         @name = name
         @rooms = {}
-        hash.each do |room_name, capacity|
+        all_hotel_rooms.each do |room_name, capacity|
             @rooms[room_name] = Room.new(capacity)#what is this?
         end
     end
 
     def name
-        (@name.split.map{|ele| ele.capitalize}).join(" ")
+        (@name.split(" ").map{|ele| ele.capitalize}).join(" ")
     end
 
     def room_exists?(room_name)
@@ -19,16 +19,28 @@ attr_reader :capacity, :occupants, :rooms
     end
 
     def check_in(person, room_name)
-        if !room_name.room_exists?
+        if self.room_exists?(room_name)
+            if available = @rooms[room_name].add_occupant(person)
+                print 'check in successful'
+            else
+            print 'sorry, room is full'
+            end
+        else
             print 'sorry, room does not exist'
         end
 
-        cur_room = @rooms[room_name].add_occupant(person)
-        if cur_room == room_name
-            print 'check in successful'
-        else
-            print 'sorry, room is full'
+        def has_vacancy?
+            @rooms.values.any? {|capacity| !capacity.full?} #why cant it be @rooms.full?
         end
+            
+        
+        def list_rooms
+            @rooms.each do |room, capacity|
+                puts "#{room} : #{capacity.available_space}"
+            end
+        end
+            
+    
 
     end
 
