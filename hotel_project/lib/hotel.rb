@@ -41,7 +41,6 @@ attr_reader :capacity, :occupants, :rooms
         end
             
     
-
     end
 
 
