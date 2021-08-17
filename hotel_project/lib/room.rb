@@ -1,3 +1,4 @@
+
 class Room
 attr_reader :capacity, :occupants
     def initialize(capacity)
